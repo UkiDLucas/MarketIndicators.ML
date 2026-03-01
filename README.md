@@ -1,7 +1,8 @@
 # Market Signals Platform
 
-This repository is the modular rebuild of the legacy MarketIndicators project.
-Runtime does not depend on the legacy archive folder; required reference assets are copied into module-local folders.
+Market Signals Platform is a research and engineering pipeline for building actionable market-intelligence signals.
+It ingests global indicators (market data, macro trends, and extensible sentiment/opinion sources), normalizes them to a weekly time base, and produces ML-ready feature tables plus trend-prediction artifacts for selected assets/indices.
+The repository is the modular rebuild of the legacy MarketIndicators project, and runtime does not depend on the legacy archive folder.
 
 ## Long-Term Architecture Memory
 
