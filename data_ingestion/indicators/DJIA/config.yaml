@@ -1,0 +1,8 @@
+source:
+  symbol: "DJIA"
+  full_name: "Dow Jones Industrial Average (^DJI)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/%5EDJI?period1=475804800&period2=1602028800&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "^DJI.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

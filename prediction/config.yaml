@@ -1,0 +1,11 @@
+input:
+  normalized_wide_file: "../data_normalization/OUTPUT/weekly_normalized_wide.csv"
+output:
+  model_dir: "OUTPUT/models"
+  metrics_file: "OUTPUT/metrics.csv"
+  predictions_dir: "OUTPUT/predictions"
+model:
+  alpha: "1.0"
+  test_fraction: "0.2"
+targets:
+  symbols: "NASDX,SWPPX,VUG,QQQ,ATRFX,VTI,TSLA,DIA,ROBO,AAPL"

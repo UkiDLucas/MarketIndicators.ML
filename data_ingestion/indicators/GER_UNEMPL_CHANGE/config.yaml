@@ -1,0 +1,8 @@
+source:
+  symbol: "GER_UNEMPL_CHANGE"
+  full_name: "Germany Unemployment Change"
+  url: "https://www.mql5.com/en/economic-calendar/germany/unemployment-change/export"
+  original_file_name: "germany.unemployment-change.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

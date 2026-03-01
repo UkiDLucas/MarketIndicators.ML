@@ -1,0 +1,8 @@
+source:
+  symbol: "US_INDS_PROD_M"
+  full_name: "Federal Reserve System (Fed) Industrial Production m/m"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/industrial-production-mm/export"
+  original_file_name: "united-states.industrial-production-mm.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

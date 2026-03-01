@@ -1,0 +1,9 @@
+source:
+  symbol: "BABA"
+  full_name: "Alibaba Group Holding Limited (BABA)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/BABA?period1=1411084800&period2=1602633600&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "BABA.csv"
+  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/BABA.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

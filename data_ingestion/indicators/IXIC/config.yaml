@@ -1,0 +1,8 @@
+source:
+  symbol: "IXIC"
+  full_name: "NASDAQ Composite (^IXIC)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/%5EIXIC?period1=34560000&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "^IXIC.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

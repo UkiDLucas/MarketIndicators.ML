@@ -1,0 +1,4 @@
+[module]
+name = "ingest_us_hous_strs_m"
+runtime = "python"
+version = "0.1.0"

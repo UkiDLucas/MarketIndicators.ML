@@ -1,0 +1,8 @@
+source:
+  symbol: "ARKQ"
+  full_name: "ARK Autonomous Technology & Robotics ETF (ARKQ)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/ARKQ?period1=1577750400&period2=1608249600&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "ARKQ.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

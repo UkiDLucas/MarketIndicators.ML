@@ -1,0 +1,8 @@
+source:
+  symbol: "ARKW"
+  full_name: "ARK Next Generation Internet ETF (ARKW)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/ARKW?period1=1412035200&period2=1608249600&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "ARKW.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

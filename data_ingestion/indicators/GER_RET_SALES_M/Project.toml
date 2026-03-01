@@ -1,0 +1,4 @@
+[module]
+name = "ingest_ger_ret_sales_m"
+runtime = "python"
+version = "0.1.0"

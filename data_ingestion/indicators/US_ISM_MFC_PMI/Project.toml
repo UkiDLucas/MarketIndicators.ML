@@ -1,0 +1,4 @@
+[module]
+name = "ingest_us_ism_mfc_pmi"
+runtime = "python"
+version = "0.1.0"

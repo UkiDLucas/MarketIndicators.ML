@@ -1,0 +1,8 @@
+source:
+  symbol: "F"
+  full_name: "Ford Motor Company (F)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/F?period1=76204800&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "F.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

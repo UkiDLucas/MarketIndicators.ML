@@ -1,0 +1,3 @@
+batch:
+  availability_file: "OUTPUT/availability_report.csv"
+  limit: "0"

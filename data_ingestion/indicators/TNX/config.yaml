@@ -1,0 +1,8 @@
+source:
+  symbol: "TNX"
+  full_name: "Treasury Yield 10 Years (^TNX)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/%5ETNX?period1=-252374400&period2=1602028800&interval=1d&events=history"
+  original_file_name: "^TNX.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

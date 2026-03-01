@@ -1,0 +1,4 @@
+[module]
+name = "ingest_vinix"
+runtime = "python"
+version = "0.1.0"

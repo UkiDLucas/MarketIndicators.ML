@@ -1,0 +1,8 @@
+source:
+  symbol: "FB"
+  full_name: "Facebook, Inc. (FB)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/FB?period1=1337299200&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "FB.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

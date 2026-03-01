@@ -1,0 +1,8 @@
+source:
+  symbol: "GSPC"
+  full_name: "S&P 500 (^GSPC)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/%5EGSPC?period1=-1325635200&period2=1602028800&interval=1d&events=history"
+  original_file_name: "^GSPC.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

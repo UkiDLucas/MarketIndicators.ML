@@ -1,0 +1,8 @@
+source:
+  symbol: "US_ISM_MFC_PMI"
+  full_name: "ISM United States Manufacturing Purchasing Managers Index (PMI)"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/ism-manufacturing-pmi/export"
+  original_file_name: "united-states.ism-manufacturing-pmi.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

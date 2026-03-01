@@ -1,0 +1,4 @@
+[module]
+name = "example_prediction_aapl"
+runtime = "python"
+version = "0.1.0"

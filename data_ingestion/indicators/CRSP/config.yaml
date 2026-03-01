@@ -1,0 +1,8 @@
+source:
+  symbol: "CRSP"
+  full_name: "CRISPR Therapeutics AG (CRSP)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/CRSP?period1=1476835200&period2=1607299200&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "CRSP.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

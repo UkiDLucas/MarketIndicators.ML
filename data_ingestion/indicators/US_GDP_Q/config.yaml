@@ -1,0 +1,8 @@
+source:
+  symbol: "US_GDP_Q"
+  full_name: "United States Gross Domestic Product (GDP) q/q"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/gross-domestic-product-qq/export"
+  original_file_name: "united-states.gross-domestic-product-qq.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

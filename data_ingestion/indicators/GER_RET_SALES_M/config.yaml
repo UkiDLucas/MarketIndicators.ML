@@ -1,0 +1,8 @@
+source:
+  symbol: "GER_RET_SALES_M"
+  full_name: "Germany Retail Sales m/m"
+  url: "https://www.mql5.com/en/economic-calendar/germany/retail-sales-mm/export"
+  original_file_name: "germany.retail-sales-mm.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

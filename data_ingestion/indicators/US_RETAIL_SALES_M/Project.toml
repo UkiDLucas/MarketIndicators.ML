@@ -1,0 +1,4 @@
+[module]
+name = "ingest_us_retail_sales_m"
+runtime = "python"
+version = "0.1.0"

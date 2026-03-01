@@ -1,0 +1,8 @@
+source:
+  symbol: "BTC_USD"
+  full_name: "Bitcoin USD (BTC-USD)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/BTC-USD?period1=1410825600&period2=1602633600&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "BTC-USD.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

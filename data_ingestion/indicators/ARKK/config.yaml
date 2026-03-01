@@ -1,0 +1,8 @@
+source:
+  symbol: "ARKK"
+  full_name: "ARK Innovation ETF (ARKK)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/ARKK?period1=1414713600&period2=1608249600&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "ARKK.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

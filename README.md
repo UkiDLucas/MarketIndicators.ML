@@ -1,107 +1,83 @@
-# Market Indicators machine learning with Julia.
+# Market Signals Platform
 
-*by [Uki D. Lucas](https://www.linkedin.com/in/ukidlucas/)*
+This repository is the long-term rebuild of the legacy MarketIndicators project.
+Legacy code and assets are preserved in `OLD/` as historical reference.
 
-## Motivation
+## Purpose
 
-This project was started in August, 2020, on [GitHub](https://github.com/UkiDLucas/MarketIndicators.jl).
+Build a modular system that:
+1. Ingests global indicators (market and macro sources first, opinion signals next).
+2. Normalizes data on a weekly cadence.
+3. Trains and evaluates regression models for target symbols.
+4. Keeps every stage independently runnable and replaceable.
 
-I have been asking myself a question: ***Can I create an AI model to predict macro-economic trends?***
+## Architecture (Long-Term Memory)
 
-Spoiler alert: Yes, I can.
+Retained architecture from the legacy pipeline image (`OLD/src/images/Market Indicators pipeline.jpg`):
+1. Source registry drives ingestion.
+2. Raw snapshots are preserved before transformation.
+3. Features are consolidated before model training.
+4. Training and prediction are separate stages.
+5. Outputs are persisted as deterministic artifacts.
 
+Modernized architecture in this repo:
+1. `data_ingestion/`: source-specific download/snapshot modules.
+2. `data_normalization/`: weekly alignment + normalization output.
+3. `prediction/`: per-target regression model training and predictions.
 
+Data flow:
+1. `OLD/src/DATA/Indicators.csv` -> `data_ingestion/indicators/*`
+2. `data_ingestion/OUTPUT/raw/*.csv` -> `data_normalization/OUTPUT/weekly_normalized_*.csv`
+3. `data_normalization/OUTPUT/weekly_normalized_wide.csv` -> `prediction/OUTPUT/*`
 
+## Functional Requirements
 
+1. **Module boundaries**
+   - Each module must own its `README.md`, `Functional_Requirements.md`, `config.yaml`, `INPUT/`, `OUTPUT/`, `src/`, `TESTS/`, and `run.sh`.
+   - Modules communicate through files, not internal imports across module boundaries.
 
+2. **Ingestion**
+   - Create one ingestion directory per indicator in `OLD/src/DATA/Indicators.csv`.
+   - Store raw CSV snapshots under `data_ingestion/OUTPUT/raw/`.
+   - Store ingestion metadata under `data_ingestion/OUTPUT/metadata/`.
+   - Support local snapshot fallback for resilience.
 
-I have separated content in 3 parts because of potentially different audience and usage:
-- 1. the [**background story**](https://medium.com/datadriveninvestor/market-indicators-a-machine-learning-project-with-julia-language-be1a452213f8) on [UkiDLucas.medium.com](https://ukidlucas.medium.com/)  for access to a wider audience, 
-- 2. the [**actual predictions**](https://github.com/UkiDLucas/MarketIndicators.jl#predictions) to be viewed frequently,
-- 3. the [**technical explanation**](https://github.com/UkiDLucas/MarketIndicators.jl/blob/master/Technical.ipynb) for these people more inclined.
+3. **Weekly normalization**
+   - Convert source data to weekly series.
+   - Produce both long and wide normalized datasets.
+   - Persist outputs deterministically:
+     - `data_normalization/OUTPUT/weekly_normalized_long.csv`
+     - `data_normalization/OUTPUT/weekly_normalized_wide.csv`
 
+4. **Prediction**
+   - Implement regression training for:
+     - `NASDX, SWPPX, VUG, QQQ, ATRFX, VTI, TSLA, DIA, ROBO, AAPL`
+   - Save trained artifacts, metrics, and prediction tables under `prediction/OUTPUT/`.
 
+5. **Auditability**
+   - Every run must generate inspectable file outputs and status traces.
+   - No silent writes outside declared output folders.
 
-If you like the content, make sure you "star", "clap", "like", and share it with your friends.
+## Repository Map
 
-<a href="https://github.com/UkiDLucas/MarketIndicators.jl"><img src="src/images/GitHub_Sponsor_Watch_Star.png" /></a>
+- `data_ingestion/` ingestion framework + per-indicator modules
+- `data_normalization/` weekly feature normalization
+- `prediction/` regression training/prediction
+- `ARCHITECTURE_FROM_LEGACY_IMAGE.md` retained architecture value notes
+- `OLD/` immutable legacy reference
 
-## Disclaimer
+## Execution
 
-I am neither a professional economist, nor a financial advisor, nor do I have ANY formal training in these subjects.
-Any market predictions shown here are the outcome of automatic machine learning without any expert human supervision, hence **the prediction could be wrong and misleading**.
+Run full pipeline:
 
-<h1>Table of Contents<span class="tocSkip"></span></h1>
-<div class="toc"><ul class="toc-item"><li><span><a href="#Motivation" data-toc-modified-id="Motivation-1">Motivation</a></span></li><li><span><a href="#Disclaimer" data-toc-modified-id="Disclaimer-2">Disclaimer</a></span></li><li><span><a href="#Predictions" data-toc-modified-id="Predictions-3">Predictions</a></span><ul class="toc-item"><li><span><a href="#AAPL" data-toc-modified-id="AAPL-3.1">AAPL</a></span></li><li><span><a href="#BABA" data-toc-modified-id="BABA-3.2">BABA</a></span></li><li><span><a href="#BRK-B" data-toc-modified-id="BRK-B-3.3">BRK-B</a></span></li><li><span><a href="#BYDDF" data-toc-modified-id="BYDDF-3.4">BYDDF</a></span></li><li><span><a href="#CRSP" data-toc-modified-id="CRSP-3.5">CRSP</a></span></li><li><span><a href="#DJIA" data-toc-modified-id="DJIA-3.6">DJIA</a></span></li><li><span><a href="#FORD" data-toc-modified-id="FORD-3.7">FORD</a></span></li><li><span><a href="#FB" data-toc-modified-id="FB-3.8">FB</a></span></li><li><span><a href="#GELYF" data-toc-modified-id="GELYF-3.9">GELYF</a></span></li><li><span><a href="#NVDA" data-toc-modified-id="NVDA-3.10">NVDA</a></span></li><li><span><a href="#GOOG" data-toc-modified-id="GOOG-3.11">GOOG</a></span></li><li><span><a href="#TPLGX" data-toc-modified-id="TPLGX-3.12">TPLGX</a></span></li><li><span><a href="#TSLA" data-toc-modified-id="TSLA-3.13">TSLA</a></span></li><li><span><a href="#VIX-index" data-toc-modified-id="VIX-index-3.14">VIX index</a></span></li></ul></li><li><span><a href="#Feedback" data-toc-modified-id="Feedback-4">Feedback</a></span></li></ul></div>
+```bash
+./run.sh
+```
 
-## Predictions
+Run module by module:
 
-Please read the [disclaimer](#Disclaimer) above.
-
-
-### AAPL
-
-<img src="src/images/predictions_AAPL.png" />
-
-### BABA
-
-<img src="src/images/predictions_BABA.png" />
-
-### BRK-B
-
-<img src="src/images/predictions_BRK_B.png" />
-
-### BYDDF
-
-<img src="src/images/predictions_BYDDF.png" />
-
-### CRSP
-
-<img src="src/images/predictions_CRSP.png" />
-
-### DJIA
-
-<img src="src/images/predictions_DJIA.png" />
-
-### FORD
-
-<img src="src/images/predictions_F.png" />
-
-### FB
-
-<img src="src/images/predictions_FB.png" />
-
-### GELYF
-
-<img src="src/images/predictions_GELYF.png" />
-
-### NVDA
-
-<img src="src/images/predictions_NVDA.png" />
-
-### GOOG
-
-<img src="src/images/predictions_GOOG.png" />
-
-### TPLGX
-
-<img src="src/images/predictions_TPLGX.png" />
-
-### TSLA
-
-<img src="src/images/predictions_TSLA.png" />
-
-### VIX index
-
-<img src="src/images/predictions_VIX.png" />
-
-## Feedback
-
-- If you have a question to the author, contact [Uki D. Lucas](https://www.linkedin.com/in/ukidlucas/)  on LinkedIn.
-- If you want to post a comment, please use [Discussions](https://github.com/UkiDLucas/MarketIndicators.jl/discussions).
-- If you want to report bug, or submit a change request, use [Issue tracker](https://github.com/UkiDLucas/MarketIndicators.jl/issues).
-
-
-```julia
-
+```bash
+./data_ingestion/run.sh
+./data_normalization/run.sh
+./prediction/run.sh
 ```

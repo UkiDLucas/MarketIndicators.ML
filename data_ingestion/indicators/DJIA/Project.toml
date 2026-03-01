@@ -1,0 +1,4 @@
+[module]
+name = "ingest_djia"
+runtime = "python"
+version = "0.1.0"

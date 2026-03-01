@@ -1,0 +1,8 @@
+source:
+  symbol: "CRUDE_OIL"
+  full_name: "Crude Oil Jan 21 (CL=F)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/CL=F?period1=966988800&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "CL=F.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

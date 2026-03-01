@@ -1,0 +1,8 @@
+source:
+  symbol: "GOOG"
+  full_name: "Alphabet Inc. (GOOG)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/GOOG?period1=1092873600&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "GOOG.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

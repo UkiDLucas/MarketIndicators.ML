@@ -1,0 +1,8 @@
+source:
+  symbol: "WMT"
+  full_name: "Walmart Inc. (WMT)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/WMT?period1=83548800&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "WMT.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

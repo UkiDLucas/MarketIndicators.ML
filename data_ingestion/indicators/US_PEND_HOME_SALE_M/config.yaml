@@ -1,0 +1,8 @@
+source:
+  symbol: "US_PEND_HOME_SALE_M"
+  full_name: "United States Pending Home Sales m/m"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/pending-home-sales-mm/export"
+  original_file_name: "united-states.pending-home-sales-mm.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

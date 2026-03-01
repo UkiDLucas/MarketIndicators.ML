@@ -1,0 +1,9 @@
+source:
+  symbol: "NRMGX"
+  full_name: "Neuberger Berman Mid Cap Growth Fund Class R6 (NRMGX)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/NRMGX?period1=1363305600&period2=1602028800&interval=1d&events=history"
+  original_file_name: "NRMGX.csv"
+  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/NRMGX.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

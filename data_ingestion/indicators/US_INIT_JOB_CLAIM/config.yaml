@@ -1,0 +1,8 @@
+source:
+  symbol: "US_INIT_JOB_CLAIM"
+  full_name: "United States Initial Jobless Claims"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/initial-jobless-claims/export"
+  original_file_name: "united-states.initial-jobless-claims.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

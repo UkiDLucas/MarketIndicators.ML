@@ -1,0 +1,8 @@
+source:
+  symbol: "ARKG"
+  full_name: "ARK Genomic Revolution ETF (ARKG)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/ARKG?period1=1577404800&period2=1608249600&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "ARKG.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

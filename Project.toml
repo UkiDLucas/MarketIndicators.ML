@@ -1,0 +1,4 @@
+[module]
+name = "market_signals"
+runtime = "multi"
+version = "0.1.0"

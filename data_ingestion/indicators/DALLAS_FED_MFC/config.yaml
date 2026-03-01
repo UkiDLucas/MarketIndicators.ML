@@ -1,0 +1,8 @@
+source:
+  symbol: "DALLAS_FED_MFC"
+  full_name: "Federal Reserve Bank (Fed) of Dallas Manufacturing Index"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/dallas-fed-manufacturing-business-index/export"
+  original_file_name: "united-states.dallas-fed-manufacturing-business-index.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

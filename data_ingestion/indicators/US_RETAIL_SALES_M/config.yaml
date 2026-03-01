@@ -1,0 +1,8 @@
+source:
+  symbol: "US_RETAIL_SALES_M"
+  full_name: "United States Retail Sales m/m"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/retail-sales-mm/export"
+  original_file_name: "united-states.retail-sales-mm.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

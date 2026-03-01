@@ -1,0 +1,6 @@
+input:
+  raw_dir: "../data_ingestion/OUTPUT/raw"
+  include_symbols: ""
+output:
+  weekly_long_file: "OUTPUT/weekly_normalized_long.csv"
+  weekly_wide_file: "OUTPUT/weekly_normalized_wide.csv"

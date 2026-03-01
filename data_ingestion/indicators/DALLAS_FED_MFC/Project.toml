@@ -1,0 +1,4 @@
+[module]
+name = "ingest_dallas_fed_mfc"
+runtime = "python"
+version = "0.1.0"

@@ -1,0 +1,4 @@
+[module]
+name = "ingest_gold"
+runtime = "python"
+version = "0.1.0"

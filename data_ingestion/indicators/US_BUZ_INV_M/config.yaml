@@ -1,0 +1,8 @@
+source:
+  symbol: "US_BUZ_INV_M"
+  full_name: "United States Business Inventories m/m"
+  url: "https://www.mql5.com/en/economic-calendar/united-states/business-inventories-mm/export"
+  original_file_name: "united-states.business-inventories-mm.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

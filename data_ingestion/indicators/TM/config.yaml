@@ -1,0 +1,8 @@
+source:
+  symbol: "TM"
+  full_name: "Toyota Motor Corporation (TM)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/TM?period1=209174400&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "TM.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

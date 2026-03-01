@@ -1,0 +1,8 @@
+source:
+  symbol: "VIX"
+  full_name: "CBOE Volatility Index (^VIX)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/%5EVIX?period1=631238400&period2=1602028800&interval=1d&events=history"
+  original_file_name: "^VIX.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

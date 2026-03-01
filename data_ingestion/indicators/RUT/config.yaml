@@ -1,0 +1,8 @@
+source:
+  symbol: "RUT"
+  full_name: "Russell 2000 (^RUT)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/%5ERUT?period1=558230400&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "^RUT.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

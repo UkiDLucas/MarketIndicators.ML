@@ -1,0 +1,9 @@
+source:
+  symbol: "TSLA"
+  full_name: "Tesla, Inc. (TSLA)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/TSLA?period1=1277769600&period2=1602028800&interval=1d&events=history"
+  original_file_name: "TSLA.csv"
+  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/TSLA.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

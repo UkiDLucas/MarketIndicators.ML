@@ -1,0 +1,4 @@
+[module]
+name = "ingest_crude_oil"
+runtime = "python"
+version = "0.1.0"

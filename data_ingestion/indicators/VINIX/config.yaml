@@ -1,0 +1,9 @@
+source:
+  symbol: "VINIX"
+  full_name: "Vanguard Institutional Index Fund Institutional Shares (VINIX)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/VINIX?period1=649382400&period2=1602028800&interval=1d&events=history"
+  original_file_name: "VINIX.csv"
+  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/VINIX.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

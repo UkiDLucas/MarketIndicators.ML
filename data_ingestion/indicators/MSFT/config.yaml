@@ -1,0 +1,8 @@
+source:
+  symbol: "MSFT"
+  full_name: "Microsoft Corporation (MSFT)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/MSFT?period1=511056000&period2=1607990400&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "MSFT"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

@@ -1,0 +1,9 @@
+source:
+  symbol: "VBTLX"
+  full_name: "Vanguard Total Bond Market Index Fund Admiral Shares (VBTLX)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/VBTLX?period1=1005523200&period2=1602028800&interval=1d&events=history"
+  original_file_name: "VBTLX.csv"
+  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/VBTLX.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

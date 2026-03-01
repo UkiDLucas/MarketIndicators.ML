@@ -1,0 +1,8 @@
+source:
+  symbol: "GELYF"
+  full_name: "Geely Automobile Holdings Limited (GELYF)"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/GELYF?period1=1167782400&period2=1607299200&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "GELYF.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"
