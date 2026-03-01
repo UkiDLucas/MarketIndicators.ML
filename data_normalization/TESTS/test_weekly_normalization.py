@@ -22,16 +22,14 @@ class TestWeeklyNormalization(unittest.TestCase):
 
             cfg = td_path / 'config.yaml'
             cfg.write_text(
-                'input:
-'
-                f'  raw_dir: "{raw_dir}"
-'
-                'output:
-'
-                f'  weekly_long_file: "{out_dir / "long.csv"}"
-'
-                f'  weekly_wide_file: "{out_dir / "wide.csv"}"
-',
+                "input:\n"
+                f"  raw_dir: \"{raw_dir}\"\n"
+                "output:\n"
+                f"  weekly_long_file: \"{out_dir / 'long.csv'}\"\n"
+                f"  weekly_levels_wide_file: \"{out_dir / 'levels.csv'}\"\n"
+                f"  weekly_growth_wide_file: \"{out_dir / 'growth.csv'}\"\n"
+                f"  weekly_features_wide_file: \"{out_dir / 'features.csv'}\"\n"
+                f"  weekly_normalized_wide_file: \"{out_dir / 'normalized.csv'}\"\n",
                 encoding='utf-8',
             )
 
@@ -39,7 +37,10 @@ class TestWeeklyNormalization(unittest.TestCase):
             subprocess.run(['python3', str(script), '--config', str(cfg)], check=True)
 
             self.assertTrue((out_dir / 'long.csv').exists())
-            self.assertTrue((out_dir / 'wide.csv').exists())
+            self.assertTrue((out_dir / 'levels.csv').exists())
+            self.assertTrue((out_dir / 'growth.csv').exists())
+            self.assertTrue((out_dir / 'features.csv').exists())
+            self.assertTrue((out_dir / 'normalized.csv').exists())
 
 
 if __name__ == '__main__':

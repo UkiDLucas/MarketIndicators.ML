@@ -1,0 +1,8 @@
+source:
+  symbol: "QQQ"
+  full_name: "Target QQQ"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/QQQ?period1=315532800&period2=1704067200&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "QQQ.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

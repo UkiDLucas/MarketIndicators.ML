@@ -1,3 +1,10 @@
 batch:
   availability_file: "OUTPUT/availability_report.csv"
   limit: "0"
+politeness:
+  remote_policy: "auto"
+  timeout_seconds: "30"
+  delay_seconds: "8"
+  jitter_seconds: "2"
+  best_effort: "1"
+  include_catalog: "0"

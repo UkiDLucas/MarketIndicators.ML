@@ -1,0 +1,4 @@
+[module]
+name = "target_ingest_aapl"
+runtime = "python"
+version = "0.1.0"

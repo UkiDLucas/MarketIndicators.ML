@@ -27,8 +27,7 @@ def load_simple_yaml(path: Path):
     data = {}
     section = None
     for line in path.read_text(encoding='utf-8').splitlines():
-        raw = line.split('#', 1)[0].rstrip('
-')
+        raw = line.split('#', 1)[0].rstrip()
         if not raw.strip():
             continue
         if raw.lstrip() != raw:
@@ -66,7 +65,7 @@ def refresh_yahoo_period2(url: str):
     return re.sub(r'period2=[^&]*', f'period2={now_unix}', url)
 
 
-def fetch_indicator(config_path: Path):
+def fetch_indicator(config_path: Path, remote_policy: str = 'auto', timeout_seconds: float = 30.0):
     cfg = load_simple_yaml(config_path)
     source = cfg.get('source', {})
     output = cfg.get('output', {})
@@ -92,22 +91,13 @@ def fetch_indicator(config_path: Path):
         'requested_at_utc': datetime.now(timezone.utc).isoformat(),
         'status': 'pending',
         'output_file': str(out_file),
+        'remote_policy': remote_policy,
+        'timeout_seconds': timeout_seconds,
     }
 
-    try:
-        if not url:
-            raise ValueError('Missing source.url in config')
+    remote_allowed = bool(source.get('remote_allowed', True))
 
-        live_url = refresh_yahoo_period2(url)
-        req = urllib.request.Request(live_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=30) as response:
-            with out_file.open('wb') as fh:
-                shutil.copyfileobj(response, fh)
-            metadata['http_status'] = int(response.getcode())
-            metadata['source'] = 'remote'
-            metadata['status'] = 'downloaded'
-            metadata['resolved_url'] = live_url
-    except Exception as exc:
+    def copy_snapshot(reason: str):
         snapshot_path = str(source.get('snapshot_path', '')).strip()
         if snapshot_path:
             snapshot = resolve_path(config_path.parent, snapshot_path)
@@ -116,13 +106,40 @@ def fetch_indicator(config_path: Path):
                 metadata['source'] = 'local_snapshot'
                 metadata['status'] = 'copied_snapshot'
                 metadata['snapshot_file'] = str(snapshot)
-                metadata['warning'] = f'remote_fetch_failed: {exc}'
+                metadata['warning'] = reason
             else:
                 metadata['status'] = 'failed'
-                metadata['error'] = f'{type(exc).__name__}: {exc}'
+                metadata['error'] = f'{reason}; snapshot_missing={snapshot}'
         else:
             metadata['status'] = 'failed'
-            metadata['error'] = f'{type(exc).__name__}: {exc}'
+            metadata['error'] = reason
+
+    if remote_policy not in {'auto', 'never'}:
+        metadata['status'] = 'failed'
+        metadata['error'] = f'Unsupported remote_policy={remote_policy}'
+        metadata_file.write_text(json.dumps(metadata, indent=2), encoding='utf-8')
+        return metadata
+
+    if (remote_policy == 'never') or (not remote_allowed):
+        copy_snapshot('remote_skipped_by_policy')
+        metadata_file.write_text(json.dumps(metadata, indent=2), encoding='utf-8')
+        return metadata
+
+    try:
+        if not url:
+            raise ValueError('Missing source.url in config')
+
+        live_url = refresh_yahoo_period2(url)
+        req = urllib.request.Request(live_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=float(timeout_seconds)) as response:
+            with out_file.open('wb') as fh:
+                shutil.copyfileobj(response, fh)
+            metadata['http_status'] = int(response.getcode())
+            metadata['source'] = 'remote'
+            metadata['status'] = 'downloaded'
+            metadata['resolved_url'] = live_url
+    except Exception as exc:
+        copy_snapshot(f'remote_fetch_failed: {type(exc).__name__}: {exc}')
 
     metadata_file.write_text(json.dumps(metadata, indent=2), encoding='utf-8')
     return metadata

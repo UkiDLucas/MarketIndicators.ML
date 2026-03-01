@@ -3,4 +3,7 @@ input:
   include_symbols: ""
 output:
   weekly_long_file: "OUTPUT/weekly_normalized_long.csv"
-  weekly_wide_file: "OUTPUT/weekly_normalized_wide.csv"
+  weekly_levels_wide_file: "OUTPUT/weekly_levels_wide.csv"
+  weekly_growth_wide_file: "OUTPUT/weekly_growth_index_wide.csv"
+  weekly_features_wide_file: "OUTPUT/weekly_features_wide.csv"
+  weekly_normalized_wide_file: "OUTPUT/weekly_normalized_wide.csv"

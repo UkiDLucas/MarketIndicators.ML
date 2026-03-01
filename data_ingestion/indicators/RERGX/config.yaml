@@ -3,7 +3,7 @@ source:
   full_name: "American Funds EuroPacific Growth Fund Class R-6 (RERGX)"
   url: "https://query1.finance.yahoo.com/v7/finance/download/RERGX?period1=1241136000&period2=1602028800&interval=1d&events=history"
   original_file_name: "RERGX.csv"
-  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/RERGX.csv"
+  snapshot_path: "../../INPUT/legacy_snapshots/original/RERGX.csv"
 output:
   raw_dir: "../../OUTPUT/raw"
   metadata_dir: "../../OUTPUT/metadata"

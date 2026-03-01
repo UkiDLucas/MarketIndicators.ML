@@ -1,4 +1,5 @@
 _KEEP_ME_SORTED_
+**/__pycache__/
 .DS_Store
 .ipynb_checkpoints/
 *.jl.*.cov
@@ -10,9 +11,14 @@ deps/deps.jl
 deps/downloads/
 deps/src/
 deps/usr/
+data_ingestion/OUTPUT/
+data_normalization/OUTPUT/
 docs/build/
 docs/site/
 Manifest.toml
+prediction/OUTPUT/
+prediction/example_prediction_aapl/OUTPUT/
 src/DATA/models/
 src/DATA/original/
 src/DATA/processed/
+PROMPT_public_cleanup.md

@@ -1,0 +1,4 @@
+[module]
+name = "target_ingest_vug"
+runtime = "python"
+version = "0.1.0"

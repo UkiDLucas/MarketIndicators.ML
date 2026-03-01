@@ -1,83 +1,72 @@
 # Market Signals Platform
 
-This repository is the long-term rebuild of the legacy MarketIndicators project.
-Legacy code and assets are preserved in `OLD/` as historical reference.
+This repository is the modular rebuild of the legacy MarketIndicators project.
+Runtime does not depend on the legacy archive folder; required reference assets are copied into module-local folders.
 
-## Purpose
+## Long-Term Architecture Memory
 
-Build a modular system that:
-1. Ingests global indicators (market and macro sources first, opinion signals next).
-2. Normalizes data on a weekly cadence.
-3. Trains and evaluates regression models for target symbols.
-4. Keeps every stage independently runnable and replaceable.
-
-## Architecture (Long-Term Memory)
-
-Retained architecture from the legacy pipeline image (`OLD/src/images/Market Indicators pipeline.jpg`):
+Retained from legacy pipeline (`docs/legacy/Market Indicators pipeline.jpg`):
 1. Source registry drives ingestion.
-2. Raw snapshots are preserved before transformation.
-3. Features are consolidated before model training.
-4. Training and prediction are separate stages.
-5. Outputs are persisted as deterministic artifacts.
+2. Raw snapshots are retained before transformations.
+3. Consolidated feature tables are built before modeling.
+4. Training is decoupled from prediction/report generation.
 
-Modernized architecture in this repo:
-1. `data_ingestion/`: source-specific download/snapshot modules.
-2. `data_normalization/`: weekly alignment + normalization output.
-3. `prediction/`: per-target regression model training and predictions.
-
-Data flow:
-1. `OLD/src/DATA/Indicators.csv` -> `data_ingestion/indicators/*`
-2. `data_ingestion/OUTPUT/raw/*.csv` -> `data_normalization/OUTPUT/weekly_normalized_*.csv`
-3. `data_normalization/OUTPUT/weekly_normalized_wide.csv` -> `prediction/OUTPUT/*`
+Current modular stages:
+1. `data_ingestion/`
+2. `data_normalization/`
+3. `prediction/`
 
 ## Functional Requirements
 
-1. **Module boundaries**
-   - Each module must own its `README.md`, `Functional_Requirements.md`, `config.yaml`, `INPUT/`, `OUTPUT/`, `src/`, `TESTS/`, and `run.sh`.
-   - Modules communicate through files, not internal imports across module boundaries.
+1. Each module is independently runnable and documented.
+2. Stage transitions happen through explicit file contracts only.
+3. No module writes into another module's internal working files.
+4. Stage handoff must be lock-free for readers and atomic for publishers.
+5. Future UI (Swift) integration must call stable module entrypoints, not internal code.
 
-2. **Ingestion**
-   - Create one ingestion directory per indicator in `OLD/src/DATA/Indicators.csv`.
-   - Store raw CSV snapshots under `data_ingestion/OUTPUT/raw/`.
-   - Store ingestion metadata under `data_ingestion/OUTPUT/metadata/`.
-   - Support local snapshot fallback for resilience.
+## Data Boundary (Stage Contracts)
 
-3. **Weekly normalization**
-   - Convert source data to weekly series.
-   - Produce both long and wide normalized datasets.
-   - Persist outputs deterministically:
-     - `data_normalization/OUTPUT/weekly_normalized_long.csv`
-     - `data_normalization/OUTPUT/weekly_normalized_wide.csv`
+1. Ingestion -> Normalization boundary:
+   - Canonical input to normalization: `data_ingestion/OUTPUT/raw/*.csv`
+   - Metadata: `data_ingestion/OUTPUT/metadata/*.json`
+   - Availability catalog: `data_ingestion/OUTPUT/availability_report.csv`
 
-4. **Prediction**
-   - Implement regression training for:
-     - `NASDX, SWPPX, VUG, QQQ, ATRFX, VTI, TSLA, DIA, ROBO, AAPL`
-   - Save trained artifacts, metrics, and prediction tables under `prediction/OUTPUT/`.
+2. Normalization -> Prediction boundary:
+   - Canonical features: `data_normalization/OUTPUT/weekly_features_wide.csv`
+   - Canonical target levels: `data_normalization/OUTPUT/weekly_levels_wide.csv`
+   - Growth visualization dataset: `data_normalization/OUTPUT/weekly_growth_index_wide.csv`
+   - Supplementary audit table: `data_normalization/OUTPUT/weekly_normalized_long.csv`
 
-5. **Auditability**
-   - Every run must generate inspectable file outputs and status traces.
-   - No silent writes outside declared output folders.
+3. Prediction outputs:
+   - `prediction/OUTPUT/models/*.pkl`
+   - `prediction/OUTPUT/metrics.csv`
+   - `prediction/OUTPUT/predictions/*_predictions.csv`
 
-## Repository Map
+See `DATA_BOUNDARY.md` for versioned contract details.
 
-- `data_ingestion/` ingestion framework + per-indicator modules
-- `data_normalization/` weekly feature normalization
-- `prediction/` regression training/prediction
-- `ARCHITECTURE_FROM_LEGACY_IMAGE.md` retained architecture value notes
-- `OLD/` immutable legacy reference
+## Lock-Free Data Shift Policy
 
-## Execution
+1. A stage writes to temp files first (same filesystem).
+2. A stage publishes by atomic rename to final artifact path.
+3. Downstream stages only read published artifact paths.
+4. No in-place mutation of already-published artifacts.
+5. Concurrent runs are isolated by run-specific temp paths.
 
-Run full pipeline:
+See `LOCK_FREE_HANDOFF.md` for the operating protocol.
+
+## Run
 
 ```bash
 ./run.sh
 ```
 
-Run module by module:
+## Weekly Ingestion Etiquette
 
-```bash
-./data_ingestion/run.sh
-./data_normalization/run.sh
-./prediction/run.sh
-```
+`data_ingestion/run.sh` is intentionally sequential and supports pacing controls to avoid aggressive traffic:
+
+- `INGEST_DELAY_SECONDS` (default `8`)
+- `INGEST_JITTER_SECONDS` (default `2`)
+- `INGEST_TIMEOUT_SECONDS` (default `30`)
+- `INGEST_REMOTE_POLICY` (`auto` or `never`)
+
+This keeps fetches to one request at a time with spacing between calls.

@@ -1,6 +1,6 @@
 # Legacy Pipeline Architecture Value
 
-Source: `OLD/src/images/Market Indicators pipeline.jpg`
+Source: `docs/legacy/Market Indicators pipeline.jpg`
 
 ## What Still Has High Value
 1. Source registry as first-class input (`Indicators.csv`) is correct and should stay.

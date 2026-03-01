@@ -1,0 +1,9 @@
+source:
+  symbol: "TSLA"
+  full_name: "Target TSLA"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/TSLA?period1=315532800&period2=1704067200&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "TSLA.csv"
+  snapshot_path: "../../INPUT/legacy_snapshots/original/TSLA.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

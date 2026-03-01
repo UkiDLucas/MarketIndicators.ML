@@ -1,0 +1,8 @@
+source:
+  symbol: "ROBO"
+  full_name: "Target ROBO"
+  url: "https://query1.finance.yahoo.com/v7/finance/download/ROBO?period1=315532800&period2=1704067200&interval=1d&events=history&includeAdjustedClose=true"
+  original_file_name: "ROBO.csv"
+output:
+  raw_dir: "../../OUTPUT/raw"
+  metadata_dir: "../../OUTPUT/metadata"

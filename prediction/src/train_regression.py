@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 import argparse
-import csv
 import math
 import pickle
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 
 def _parse_scalar(raw: str):
@@ -22,8 +22,7 @@ def load_simple_yaml(path: Path):
     data = {}
     section = None
     for line in path.read_text(encoding='utf-8').splitlines():
-        raw = line.split('#', 1)[0].rstrip('
-')
+        raw = line.split('#', 1)[0].rstrip()
         if not raw.strip():
             continue
         if raw.lstrip() != raw:
@@ -55,53 +54,76 @@ def safe_float(text: str, default: float):
         return default
 
 
-def train_one(df: pd.DataFrame, target: str, alpha: float, test_fraction: float):
-    feature_cols = [c for c in df.columns if c != target]
-    working = df[feature_cols + [target]].copy()
-    working['target_next'] = working[target].shift(-1)
-    working = working.dropna()
+def train_one(
+    features_df: pd.DataFrame,
+    levels_df: pd.DataFrame,
+    target: str,
+    alpha: float,
+    test_fraction: float,
+):
+    if target not in levels_df.columns:
+        return None, None, {'target': target, 'status': 'missing_target_series'}
 
-    if len(working) < 24 or len(feature_cols) < 1:
-        return None, None, 'insufficient_data'
+    # Target = next-week return. This is a stationary target and avoids direct scale drift.
+    target_return = levels_df[target].pct_change().shift(-1).rename('target_next_return')
+    current_level = levels_df[target].rename('current_level')
 
-    X = working[feature_cols].to_numpy(dtype=float)
-    y = working['target_next'].to_numpy(dtype=float)
+    merged = pd.concat([features_df, target_return, current_level], axis=1)
+    merged = merged.dropna()
+    if len(merged) < 52:
+        return None, None, {'target': target, 'status': 'insufficient_data'}
 
-    split = max(int(len(working) * (1.0 - test_fraction)), 1)
-    if split >= len(working):
-        split = len(working) - 1
+    feature_cols = list(features_df.columns)
+    X = merged[feature_cols]
+    y = merged['target_next_return']
+    lvl = merged['current_level']
 
-    X_train, X_test = X[:split], X[split:]
-    y_train, y_test = y[:split], y[split:]
+    split = max(int(len(merged) * (1.0 - test_fraction)), 1)
+    if split >= len(merged):
+        split = len(merged) - 1
 
-    model = Ridge(alpha=alpha)
+    X_train, X_test = X.iloc[:split], X.iloc[split:]
+    y_train, y_test = y.iloc[:split], y.iloc[split:]
+    lvl_test = lvl.iloc[split:]
+
+    model = make_pipeline(StandardScaler(), Ridge(alpha=alpha))
     model.fit(X_train, y_train)
-
     y_pred = model.predict(X_test)
 
     rmse = math.sqrt(mean_squared_error(y_test, y_pred))
     mae = mean_absolute_error(y_test, y_pred)
     r2 = r2_score(y_test, y_pred)
 
-    pred_df = pd.DataFrame({
-        'y_actual': y_test,
-        'y_predicted': y_pred,
-    })
+    pred_df = pd.DataFrame(
+        {
+            'week_end': X_test.index,
+            'current_level': lvl_test.values,
+            'y_actual_return': y_test.values,
+            'y_pred_return': y_pred,
+        }
+    )
+    pred_df['implied_actual_next_level'] = pred_df['current_level'] * (1.0 + pred_df['y_actual_return'])
+    pred_df['implied_pred_next_level'] = pred_df['current_level'] * (1.0 + pred_df['y_pred_return'])
 
     metrics = {
         'target': target,
         'status': 'trained',
-        'rows_total': len(working),
+        'rows_total': len(merged),
         'rows_train': len(X_train),
         'rows_test': len(X_test),
         'feature_count': len(feature_cols),
         'alpha': alpha,
-        'rmse': rmse,
-        'mae': mae,
-        'r2': r2,
+        'rmse_return': rmse,
+        'mae_return': mae,
+        'r2_return': r2,
     }
 
-    return model, (feature_cols, pred_df), metrics
+    payload = {
+        'model': model,
+        'feature_cols': feature_cols,
+        'target': target,
+    }
+    return payload, pred_df, metrics
 
 
 def main():
@@ -117,7 +139,12 @@ def main():
     model_cfg = cfg.get('model', {})
     target_cfg = cfg.get('targets', {})
 
-    wide_file = resolve_path(cfg_path.parent, in_cfg.get('normalized_wide_file', '../data_normalization/OUTPUT/weekly_normalized_wide.csv'))
+    features_wide_file = resolve_path(
+        cfg_path.parent, in_cfg.get('features_wide_file', '../data_normalization/OUTPUT/weekly_features_wide.csv')
+    )
+    levels_wide_file = resolve_path(
+        cfg_path.parent, in_cfg.get('levels_wide_file', '../data_normalization/OUTPUT/weekly_levels_wide.csv')
+    )
     model_dir = resolve_path(cfg_path.parent, out_cfg.get('model_dir', 'OUTPUT/models'))
     metrics_file = resolve_path(cfg_path.parent, out_cfg.get('metrics_file', 'OUTPUT/metrics.csv'))
     predictions_dir = resolve_path(cfg_path.parent, out_cfg.get('predictions_dir', 'OUTPUT/predictions'))
@@ -130,33 +157,42 @@ def main():
     predictions_dir.mkdir(parents=True, exist_ok=True)
     metrics_file.parent.mkdir(parents=True, exist_ok=True)
 
-    if not wide_file.exists():
-        raise SystemExit(f'Normalized dataset missing: {wide_file}')
+    if not features_wide_file.exists():
+        raise SystemExit(f'Features dataset missing: {features_wide_file}')
+    if not levels_wide_file.exists():
+        raise SystemExit(f'Levels dataset missing: {levels_wide_file}')
 
-    df = pd.read_csv(wide_file)
-    if 'week_end' in df.columns:
-        df = df.sort_values('week_end').set_index('week_end')
+    features_df = pd.read_csv(features_wide_file)
+    levels_df = pd.read_csv(levels_wide_file)
 
-    for col in df.columns:
-        df[col] = pd.to_numeric(df[col], errors='coerce')
+    if 'week_end' not in features_df.columns or 'week_end' not in levels_df.columns:
+        raise SystemExit('Expected week_end column in both features and levels datasets')
 
-    df = df.dropna(how='all')
+    features_df['week_end'] = pd.to_datetime(features_df['week_end'], errors='coerce')
+    levels_df['week_end'] = pd.to_datetime(levels_df['week_end'], errors='coerce')
+
+    features_df = features_df.dropna(subset=['week_end']).sort_values('week_end').set_index('week_end')
+    levels_df = levels_df.dropna(subset=['week_end']).sort_values('week_end').set_index('week_end')
+
+    for col in features_df.columns:
+        features_df[col] = pd.to_numeric(features_df[col], errors='coerce')
+    for col in levels_df.columns:
+        levels_df[col] = pd.to_numeric(levels_df[col], errors='coerce')
+
+    # Keep rows where at least one feature exists; per-target training does final dropna.
+    features_df = features_df.dropna(how='all')
+    levels_df = levels_df.dropna(how='all')
 
     all_metrics = []
     for target in targets:
-        if target not in df.columns:
-            all_metrics.append({'target': target, 'status': 'missing_target_series'})
+        model_payload, pred_df, metrics = train_one(features_df, levels_df, target, alpha, test_fraction)
+        if metrics['status'] != 'trained':
+            all_metrics.append(metrics)
             continue
 
-        model, payload, metrics = train_one(df, target, alpha, test_fraction)
-        if model is None:
-            all_metrics.append({'target': target, 'status': 'insufficient_data'})
-            continue
-
-        feature_cols, pred_df = payload
         model_path = model_dir / f'{target}.pkl'
         with model_path.open('wb') as fh:
-            pickle.dump({'model': model, 'feature_cols': feature_cols, 'target': target}, fh)
+            pickle.dump(model_payload, fh)
 
         pred_path = predictions_dir / f'{target}_predictions.csv'
         pred_df.to_csv(pred_path, index=False)

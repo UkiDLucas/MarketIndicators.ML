@@ -3,7 +3,7 @@ source:
   full_name: "T. Rowe Price Institutional Large Cap Core Growth Fund (TPLGX)"
   url: "https://query1.finance.yahoo.com/v7/finance/download/TPLGX?period1=1064966400&period2=1607904000&interval=1d&events=history&includeAdjustedClose=true"
   original_file_name: "TPLGX.csv"
-  snapshot_path: "/Users/uki/REPOS/MarketIndicators.jl/OLD/src/DATA/original/TPLGX.csv"
+  snapshot_path: "../../INPUT/legacy_snapshots/original/TPLGX.csv"
 output:
   raw_dir: "../../OUTPUT/raw"
   metadata_dir: "../../OUTPUT/metadata"
